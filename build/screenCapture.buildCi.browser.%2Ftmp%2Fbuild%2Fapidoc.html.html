@@ -1,0 +1,791 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/gomfunkel/node-exif#readme">exif (v0.6.0)</a>
+</h1>
+<h4>A node.js library to extract Exif metadata from images.</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.exif">module exif</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.exif.exif">
+            function <span class="apidocSignatureSpan"></span>exif
+            <span class="apidocSignatureSpan">(options, callback)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.exif.ExifImage">
+            function <span class="apidocSignatureSpan">exif.</span>ExifImage
+            <span class="apidocSignatureSpan">(options, callback)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">exif.</span>ExifImage.prototype</span>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">exif.</span>TAGS</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.exif.ExifImage">module exif.ExifImage</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.exif.ExifImage.ExifImage">
+            function <span class="apidocSignatureSpan">exif.</span>ExifImage
+            <span class="apidocSignatureSpan">(options, callback)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">exif.ExifImage.</span>TAGS</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.exif.ExifImage.prototype">module exif.ExifImage.prototype</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.exif.ExifImage.prototype.extractExifData">
+            function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>extractExifData
+            <span class="apidocSignatureSpan">(data, start, length)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.exif.ExifImage.prototype.extractExifEntry">
+            function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>extractExifEntry
+            <span class="apidocSignatureSpan">(data, entryOffset, tiffOffset, isBigEndian, tags)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.exif.ExifImage.prototype.loadImage">
+            function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>loadImage
+            <span class="apidocSignatureSpan">(image, callback)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.exif.ExifImage.prototype.processImage">
+            function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>processImage
+            <span class="apidocSignatureSpan">(source, data, callback)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.exif" id="apidoc.module.exif">module exif</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.exif.exif" id="apidoc.element.exif.exif">
+        function <span class="apidocSignatureSpan"></span>exif
+        <span class="apidocSignatureSpan">(options, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function ExifImage(options, callback) {
+  if (!(this instanceof ExifImage)) {
+    if (typeof(options)==="string") {
+      options = {
+          image: options
+      }
+    }
+
+    assert(typeof(options)==="object", "Invalid options object");
+
+    var exifImage = new ExifImage(options, function(error, data) {
+      if (error) {
+        return callback(error);
+      }
+
+      callback(null, data, options.image);
+    });
+
+    return exifImage;
+  }
+
+  if (typeof(options)==="string") {
+    options= {
+        image: options
+    }
+  } else if (options instanceof Buffer) {
+    options= {
+        image: options
+    }
+  }
+
+  var ops={};
+  if (options) {
+    for(var k in options) {
+      ops[k]=options[k];
+    }
+  }
+  this.options=ops;
+
+  // Default option values
+  ["ifd0MaxEntries", "ifd1MaxEntries", "maxGpsEntries", "maxInteroperabilityEntries", "agfaMaxEntries", "epsonMaxEntries",
+     "fujifilmMaxEntries", "olympusMaxEntries", "panasonicMaxEntries", "sanyoMaxEntries"].forEach(function(p) {
+       if (ops[p]===undefined) {
+         ops[p]=DEFAULT_MAX_ENTRIES;
+       }
+     });
+
+  this.exifData = {
+    image : {},                 // Information about the main image
+    thumbnail : {},             // Information about the thumbnail
+    exif : {},                  // Exif information
+    gps : {},                   // GPS information
+    interoperability: {},       // Exif Interoperability information
+    makernote : {}              // Makernote information
+  };
+
+  this.offsets={};
+  if (ops.tiffOffsets) {
+    exifData.offsets=offsets;
+  }
+
+  debug("New ExifImage options=",options);
+
+  if (!ops.image) {
+    // If options image is not specified, the developper must call loadImage() to parse the image.
+//    callback(new Error('You have to provide an image, it is pretty hard to extract Exif data from nothing...'));
+    return;
+  }
+
+  if (typeof callback !== 'function') {
+    throw new Error('You have to provide a callback function.');
+  }
+
+  var self=this;
+  setImmediate(function() {
+    self.loadImage(ops.image, function (error, exifData) {
+      if (error) {
+        return callback(error);
+      }
+
+      callback(null, exifData, ops.image);
+    });
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.exif.ExifImage" id="apidoc.element.exif.ExifImage">
+        function <span class="apidocSignatureSpan">exif.</span>ExifImage
+        <span class="apidocSignatureSpan">(options, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function ExifImage(options, callback) {
+  if (!(this instanceof ExifImage)) {
+    if (typeof(options)==="string") {
+      options = {
+          image: options
+      }
+    }
+
+    assert(typeof(options)==="object", "Invalid options object");
+
+    var exifImage = new ExifImage(options, function(error, data) {
+      if (error) {
+        return callback(error);
+      }
+
+      callback(null, data, options.image);
+    });
+
+    return exifImage;
+  }
+
+  if (typeof(options)==="string") {
+    options= {
+        image: options
+    }
+  } else if (options instanceof Buffer) {
+    options= {
+        image: options
+    }
+  }
+
+  var ops={};
+  if (options) {
+    for(var k in options) {
+      ops[k]=options[k];
+    }
+  }
+  this.options=ops;
+
+  // Default option values
+  ["ifd0MaxEntries", "ifd1MaxEntries", "maxGpsEntries", "maxInteroperabilityEntries", "agfaMaxEntries", "epsonMaxEntries",
+     "fujifilmMaxEntries", "olympusMaxEntries", "panasonicMaxEntries", "sanyoMaxEntries"].forEach(function(p) {
+       if (ops[p]===undefined) {
+         ops[p]=DEFAULT_MAX_ENTRIES;
+       }
+     });
+
+  this.exifData = {
+    image : {},                 // Information about the main image
+    thumbnail : {},             // Information about the thumbnail
+    exif : {},                  // Exif information
+    gps : {},                   // GPS information
+    interoperability: {},       // Exif Interoperability information
+    makernote : {}              // Makernote information
+  };
+
+  this.offsets={};
+  if (ops.tiffOffsets) {
+    exifData.offsets=offsets;
+  }
+
+  debug("New ExifImage options=",options);
+
+  if (!ops.image) {
+    // If options image is not specified, the developper must call loadImage() to parse the image.
+//    callback(new Error('You have to provide an image, it is pretty hard to extract Exif data from nothing...'));
+    return;
+  }
+
+  if (typeof callback !== 'function') {
+    throw new Error('You have to provide a callback function.');
+  }
+
+  var self=this;
+  setImmediate(function() {
+    self.loadImage(ops.image, function (error, exifData) {
+      if (error) {
+        return callback(error);
+      }
+
+      callback(null, exifData, ops.image);
+    });
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.exif.ExifImage" id="apidoc.module.exif.ExifImage">module exif.ExifImage</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.exif.ExifImage.ExifImage" id="apidoc.element.exif.ExifImage.ExifImage">
+        function <span class="apidocSignatureSpan">exif.</span>ExifImage
+        <span class="apidocSignatureSpan">(options, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function ExifImage(options, callback) {
+  if (!(this instanceof ExifImage)) {
+    if (typeof(options)==="string") {
+      options = {
+          image: options
+      }
+    }
+
+    assert(typeof(options)==="object", "Invalid options object");
+
+    var exifImage = new ExifImage(options, function(error, data) {
+      if (error) {
+        return callback(error);
+      }
+
+      callback(null, data, options.image);
+    });
+
+    return exifImage;
+  }
+
+  if (typeof(options)==="string") {
+    options= {
+        image: options
+    }
+  } else if (options instanceof Buffer) {
+    options= {
+        image: options
+    }
+  }
+
+  var ops={};
+  if (options) {
+    for(var k in options) {
+      ops[k]=options[k];
+    }
+  }
+  this.options=ops;
+
+  // Default option values
+  ["ifd0MaxEntries", "ifd1MaxEntries", "maxGpsEntries", "maxInteroperabilityEntries", "agfaMaxEntries", "epsonMaxEntries",
+     "fujifilmMaxEntries", "olympusMaxEntries", "panasonicMaxEntries", "sanyoMaxEntries"].forEach(function(p) {
+       if (ops[p]===undefined) {
+         ops[p]=DEFAULT_MAX_ENTRIES;
+       }
+     });
+
+  this.exifData = {
+    image : {},                 // Information about the main image
+    thumbnail : {},             // Information about the thumbnail
+    exif : {},                  // Exif information
+    gps : {},                   // GPS information
+    interoperability: {},       // Exif Interoperability information
+    makernote : {}              // Makernote information
+  };
+
+  this.offsets={};
+  if (ops.tiffOffsets) {
+    exifData.offsets=offsets;
+  }
+
+  debug("New ExifImage options=",options);
+
+  if (!ops.image) {
+    // If options image is not specified, the developper must call loadImage() to parse the image.
+//    callback(new Error('You have to provide an image, it is pretty hard to extract Exif data from nothing...'));
+    return;
+  }
+
+  if (typeof callback !== 'function') {
+    throw new Error('You have to provide a callback function.');
+  }
+
+  var self=this;
+  setImmediate(function() {
+    self.loadImage(ops.image, function (error, exifData) {
+      if (error) {
+        return callback(error);
+      }
+
+      callback(null, exifData, ops.image);
+    });
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.exif.ExifImage.prototype" id="apidoc.module.exif.ExifImage.prototype">module exif.ExifImage.prototype</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.exif.ExifImage.prototype.extractExifData" id="apidoc.element.exif.ExifImage.prototype.extractExifData">
+        function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>extractExifData
+        <span class="apidocSignatureSpan">(data, start, length)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">extractExifData = function (data, start, length) {
+
+  var exifData=this.exifData;
+  var tiffOffset = start + 6;
+  var ifdOffset, numberOfEntries;
+  var noPadding = (this.options.noPadding!==false);
+
+  this.offsets.tiff=tiffOffset;
+
+  // Exif data always starts with Exif\0\0
+  if (data.toString('utf8', start, tiffOffset) != 'Exif\0\0') {
+    throw new Error('The Exif data is not valid.');
+  }
+
+  // After the Exif start we either have 0x4949 if the following data is
+  // stored in big endian or 0x4D4D if it is stored in little endian
+  if (data.getShort(tiffOffset) == 0x4949) {
+    this.isBigEndian = false;
+
+  } else if (data.getShort(tiffOffset) == 0x4D4D) {
+    this.isBigEndian = true;
+
+  } else {
+    throw new Error('Invalid TIFF data! Expected 0x4949 or 0x4D4D at offset '+(tiffOffset)+' but found 0x'+data[tiffOffset].toString
+(16).toUpperCase()+data[tiffOffset + 1].toString(16).toUpperCase()+".");
+  }
+
+  debug("BigEndian=",this.isBigEndian);
+
+  // Valid TIFF headers always have 0x002A here
+  if (data.getShort(tiffOffset + 2, this.isBigEndian) != 0x002A) {
+    var expected = (this.isBigEndian) ? '0x002A' : '0x2A00';
+    throw new Error('Invalid TIFF data! Expected '+expected+' at offset '+(tiffOffset + 2)+' but found 0x'+data[tiffOffset + 2].
+toString(16).toUpperCase()+data[tiffOffset + 3].toString(16).toUpperCase()+".");
+  }
+
+  /********************************* IFD0 **********************************/
+
+  // Offset to IFD0 which is always followed by two bytes with the amount of
+  // entries in this IFD
+  ifdOffset = tiffOffset + data.getLong(tiffOffset + 4, this.isBigEndian);
+  this.offsets.ifd0=ifdOffset;
+
+  numberOfEntries = data.getShort(ifdOffset, this.isBigEndian);
+  if (this.options.ifd0MaxEntries) {
+    numberOfEntries=Math.min(numberOfEntries, this.options.ifd0MaxEntries);
+  }
+
+  debug("IFD0 ifdOffset=",ifdOffset, "numberOfEntries=", numberOfEntries);
+
+  // Each IFD entry consists of 12 bytes which we loop through and extract
+  // the data from
+  for (var i = 0; i &lt; numberOfEntries; i++) {
+    var exifEntry = this.extractExifEntry(data, (ifdOffset + 2 + (i * 12)), tiffOffset, this.isBigEndian, ExifImage.TAGS.exif);
+    if (!exifEntry) {
+      continue;
+    }
+
+    if (exifEntry.tagId===0xEA1C &amp;&amp; noPadding) {
+      continue;
+    }
+
+    exifData.image[exifEntry.tagName] = exifEntry.value;
+  }
+
+  debug("IFD0 parsed", exifData.image);
+
+  /********************************* IFD1 **********************************/
+
+  // Check if there is an offset for IFD1. If so it is always followed by two
+  // bytes with the amount of entries in this IFD, if not there is no IFD1
+  var nextIfdOffset = data.getLong(ifdOffset + 2 + (numberOfEntries * 12), this.isBigEndian)
+  if (nextIfdOffset != 0x00000000) {
+    ifdOffset = tiffOffset + nextIfdOffset;
+    this.offsets.ifd1=ifdOffset;
+    numberOfEntries = data.getShort(ifdOffset, this.isBigEndian);
+    if (this.options.ifd1MaxEntries) {
+      numberOfEntries=Math.min(numberOfEntries, this.options.ifd1MaxEntries);
+    }
+
+    debug("IFD1 ifdOffset=",ifdOffset, "numberOfEntries=", numberOfEntries);
+
+    // Each IFD entry consists of 12 bytes which we loop through and extract
+    // the data from
+    for (var i = 0; i &lt; numberOfEntries; i++) {
+      var exifEntry = this.extractExifEntry(data, (ifdOffset + 2 + (i * 12)), tiffOffset, this.isBigEndian, ExifImage.TAGS.exif);
+      if (!exifEntry) {
+        continue;
+      }
+
+      if (exifEntry.tagId===0xEA1C &amp;&amp; noPadding) {
+        continue;
+      }
+
+      exifData.thumbnail[exifEntry.tagName] = exifEntry.value;
+    }
+
+    if (this.options.fixThumbnailOffset) {
+      var thumbnailOffset=exifData.thumbnail[ExifImage.TAGS.exif[0x0201]];
+      if (thumbnailOffset) {
+        debug("IFD1 fix thumbnail offset, add=",this.offsets.tiff);
+
+        exifData.thumbnail[ExifImage.TAGS.exif[0x0201]]+=this.offsets.tiff;
+      }
+    }
+
+    debug("IFD1 parsed", exifData.thumbnail);
+  }
+
+  /******************************* ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.exif.ExifImage.prototype.extractExifEntry" id="apidoc.element.exif.ExifImage.prototype.extractExifEntry">
+        function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>extractExifEntry
+        <span class="apidocSignatureSpan">(data, entryOffset, tiffOffset, isBigEndian, tags)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">extractExifEntry = function (data, entryOffset, tiffOffset, isBigEndian, tags) {
+
+  var entry = {
+    tag : data.slice(entryOffset, entryOffset + 2),
+    tagId : null,
+    tagName : null,
+    format : data.getShort(entryOffset + 2, isBigEndian),
+    components : data.getLong(entryOffset + 4, isBigEndian),
+    valueOffset: null,
+    value : []
+  }
+
+  entry.tagId = entry.tag.getShort(0, isBigEndian);
+
+  // The tagId may correspond to more then one tagName so check which
+  if (tags &amp;&amp; tags[entry.tagId] &amp;&amp; typeof tags[entry.tagId] == "function") {
+    entry.tagName = tags[entry.tagId].call(this, entry);
+    if (!entry.tagName) {
+      return false;
+    }
+
+  // The tagId corresponds to exactly one tagName
+  } else if (tags &amp;&amp; tags[entry.tagId]) {
+    entry.tagName = tags[entry.tagId];
+    if (entry.tagName===undefined) {
+      return false;
+    }
+
+  // The tagId is not recognized
+  } else {
+    return false;
+  }
+
+  switch (entry.format) {
+
+    case 0x0001: // unsigned byte, 1 byte per component
+      entry.valueOffset = (entry.components &lt;= 4) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      for (var i = 0; i &lt; entry.components; i++)
+        entry.value.push(data.getByte(entry.valueOffset + i));
+      break;
+
+    case 0x0002: // ascii strings, 1 byte per component
+      entry.valueOffset = (entry.components &lt;= 4) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      entry.value = data.getString(entry.valueOffset, entry.components);
+      if (entry.value[entry.value.length - 1] === "\u0000") // Trim null terminated strings
+        entry.value = entry.value.substring(0, entry.value.length - 1);
+      break;
+
+    case 0x0003: // unsigned short, 2 byte per component
+      entry.valueOffset = (entry.components &lt;= 2) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      for (var i = 0; i &lt; entry.components; i++)
+        entry.value.push(data.getShort(entry.valueOffset + i * 2, isBigEndian));
+      break;
+
+    case 0x0004: // unsigned long, 4 byte per component
+      entry.valueOffset = (entry.components == 1) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      for (var i = 0; i &lt; entry.components; i++)
+        entry.value.push(data.getLong(entry.valueOffset + i * 4, isBigEndian));
+      break;
+
+    case 0x0005: // unsigned rational, 8 byte per component (4 byte numerator and 4 byte denominator)
+      entry.valueOffset = data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      for (var i = 0; i &lt; entry.components; i++)
+        entry.value.push(data.getLong(entry.valueOffset + i * 8, isBigEndian) / data.getLong(entry.valueOffset + i * 8 + 4, isBigEndian
+));
+      break;
+
+    case 0x0006: // signed byte, 1 byte per component
+      entry.valueOffset = (entry.components &lt;= 4) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      for (var i = 0; i &lt; entry.components; i++)
+        entry.value.push(data.getSignedByte(entry.valueOffset + i));
+      break;
+
+    case 0x0007: // undefined, 1 byte per component
+      entry.valueOffset = (entry.components &lt;= 4) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      entry.value.push(data.slice(entry.valueOffset, entry.valueOffset + entry.components));
+      break;
+
+    case 0x0008: // signed short, 2 byte per component
+      entry.valueOffset = (entry.components &lt;= 2) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      for (var i = 0; i &lt; entry.components; i++)
+        entry.value.push(data.getSignedShort(entry.valueOffset + i * 2, isBigEndian));
+      break;
+
+    case 0x0009: // signed long, 4 byte per component
+      entry.valueOffset = (entry.components == 1) ? entryOffset + 8 : data.getLong(entryOffset + 8, isBigEndian) + tiffOffset;
+      for (var i = 0; i &lt; entry.components; i++)
+        entry.value.push(data.getSignedLong(entry.valueOffset + i * 4, isBigEndian));
+      break;
+
+    case 0x000A: // signed r ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.exif.ExifImage.prototype.loadImage" id="apidoc.element.exif.ExifImage.prototype.loadImage">
+        function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>loadImage
+        <span class="apidocSignatureSpan">(image, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">loadImage = function (image, callback) {
+  assert(typeof(callback)==="function", "Callback must be a function");
+
+  var self = this;
+
+  debug("loadImage image=", image);
+
+  if (image.constructor.name === 'Buffer') {
+    this.processImage("Buffer", image, callback);
+    return;
+  }
+
+  if (image.constructor.name === 'String') {
+    fs.readFile(image, function (error, data) {
+      if (error) {
+        callback(new Error('Encountered the following error while trying to read given image: '+error));
+        return;
+      }
+
+      self.processImage("File: "+image, data, callback);
+    });
+    return;
+  }
+
+  callback(new Error('Given image is neither a buffer nor a file, please provide one of these.'));
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.exif.ExifImage.prototype.processImage" id="apidoc.element.exif.ExifImage.prototype.processImage">
+        function <span class="apidocSignatureSpan">exif.ExifImage.prototype.</span>processImage
+        <span class="apidocSignatureSpan">(source, data, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">processImage = function (source, data, callback) {
+  assert(typeof(source)==="string", "Source must be a string");
+  assert(typeof(callback)==="function", "Callback must be a function");
+
+  var offset = 0;
+
+  if (data[offset++] != 0xFF || data[offset++] != 0xD8) {
+    var e=new Error('The given image is not a JPEG and thus unsupported right now.');
+    e.source=source;
+    e.code="NOT_A_JPEG";
+    callback(e);
+    return;
+  }
+
+  this.imageType = 'JPEG';
+
+  while (offset &lt; data.length) {
+
+    if (data[offset++] != 0xFF) {
+      break;
+    }
+
+    if (data[offset++] == 0xE1) {
+      try {
+        this.extractExifData(data, offset + 2, data.getShort(offset, true) - 2);
+
+      } catch (error) {
+        error.code="PARSING_ERROR";
+        error.source=source;
+
+        debug("Extract exif data error source=", source, "offset=", offset, "error=",error);
+
+        callback(error);
+        return;
+      }
+
+      debug("Extract exif data success source=", source, "exifData=",this.exifData);
+
+      callback(null, this.exifData);
+      return;
+    }
+
+    offset += data.getShort(offset, true);
+  }
+
+  var e2=new Error('No Exif segment found in the given image.');
+  e2.source=source;
+  e2.code="NO_EXIF_SEGMENT";
+
+  callback(e2);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
